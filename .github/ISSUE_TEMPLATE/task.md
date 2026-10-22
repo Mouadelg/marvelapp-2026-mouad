@@ -2,6 +2,7 @@
 name: Task Templaye
 about: Main task template
 title: ''
+labels: user-story
 assignees: ''
 type: task
 
@@ -28,4 +29,3 @@ siguientes.
 ## 📚Referencias y Recursos
 
 ## 🛑Impedimentos Detectados
- 

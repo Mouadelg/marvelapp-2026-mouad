@@ -29,4 +29,3 @@ siguientes.
 ## 📚Referencias y Recursos
 
 ## 🛑Impedimentos Detectados
- 
