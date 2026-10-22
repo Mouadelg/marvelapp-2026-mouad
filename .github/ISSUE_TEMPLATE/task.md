@@ -1,14 +1,13 @@
 ---
-name: Task
-about: Tarea o subtarea
+name: Task Templaye
+about: Main task template
 title: ''
-labels: user-story
 assignees: ''
-type: Feature
+type: task
 
 ---
 
-## 🎯 Historia de usuario
+## 🎯 Objetivo de esta tarea
 
 Como Rol: Usuario/Desarrollador/Product Manager/etc.,
 quiero Funcionalidad que se va a construir, para poder Valor/Beneficio que aporta al proyecto.
