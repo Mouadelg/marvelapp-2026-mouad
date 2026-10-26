@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MarvelApp</string>
+
+    <string name="preference_file_key">local_source_superHero</string>
 </resources>
