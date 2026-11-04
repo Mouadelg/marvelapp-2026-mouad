@@ -2,57 +2,62 @@ package edu.iesam.marvelapp.features.superheroes.data.local.xml
 
 import android.content.Context
 import edu.iesam.marvelapp.R
+import edu.iesam.marvelapp.core.serialization.JsonSerializer
+import edu.iesam.marvelapp.core.serialization.KotlinJsonSerializer
 import edu.iesam.marvelapp.features.superheroes.domain.SuperHero
 
 /*
 * Conector para gestionar datos en un fichero XML o través de SharedPreferences
 *
 */
-class SuperHeroXmlLocalDaraSource(private val context: Context) {
+class SuperHeroXmlLocalDaraSource(
+    private val context: Context,
+    private val serializer: JsonSerializer<List<SuperHero>> = KotlinJsonSerializer.create()
+) {
+    private val keySuperHero = "key_superhero"
+
     val sharedPref = context.getSharedPreferences(
         context.getString(R.string.preference_file_key),
         Context.MODE_PRIVATE
     )
 
     public fun findAl(): List<SuperHero> {
-        // sharedPref.getString()
-        return emptyList()
+        return findAll()
     }
 
-    public fun findByUd(id: String): SuperHero {
-        return SuperHero(
-            "id",
-            "name",
-            "slug",
-            urlImage = TODO()
-        )
+    public fun findByUd(id: String): SuperHero? {
+        return findById(id)
     }
 
     public fun save(superHeroes: List<SuperHero>) {
+        val json = serializer.toJson(superHeroes)
+        with(sharedPref.edit()) {
+            putString(keySuperHero, json)
+            apply()
+        }
+    }
 
-        //sharedPref.edit().putString("id", superHeroes.first().id)
-        //sharedPref.edit().putString("name", superHeroes.first().name)
-        //sharedPref.edit().putString("slug", superHeroes.first().slug)
+    fun findAll(): List<SuperHero> {
+        val jsonList: String? = sharedPref.getString(keySuperHero, null)
+        jsonList?.let {
+            return serializer.fromJson(it)
+        }
+        return emptyList()
+    }
 
-        //with(sharedPref.edit()){
-        //    putString("id", superHeroes.first().id)
-        //   putString("name", superHeroes.first().name)
-        // putString("slug", superHeroes.first().slug)
-        // apply()
-        //}
+    fun findById(id: String): SuperHero? {
+        return findAll().find { it.id == id }
+    }
 
+    fun deleteById(id: String) {
+        val list = findAll().filterNot { it.id == id }
+        save(list)
+    }
 
-        // Dos formas de persistir un local
-        sharedPref.edit().apply()
-        // sharedPref.edit().commit()
-
-        superHeroes.forEach { superHero ->
-            with(sharedPref.edit()) {
-                putString("id-${superHero.id}", superHero.id)
-                putString("name-${superHero.id}", superHero.name)
-                putString("slug-${superHero.id}", superHero.slug)
-                apply()
-            }
+    fun deleteAll() {
+        sharedPref.edit().apply {
+            remove(keySuperHero)
+            apply()
         }
     }
 }
